@@ -11,9 +11,11 @@ builder.Services.AddScoped<MyDatabaseConnection>( _ =>
 
 builder.Services.AddScoped<LibraryService>();
 builder.Services.AddControllers();
-builder.Services.AddCors();
-
 builder.Services.AddOpenApiDocument();
+builder.Services.AddCors();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<MyExceptionHandler>();
+
 
 var app = builder.Build();
 
@@ -30,6 +32,7 @@ using (var scope = app.Services.CreateScope())
             });
 }
 
+app.UseExceptionHandler();
 app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().SetIsOriginAllowed(_ => true));
 app.MapControllers();
 app.UseOpenApi();
