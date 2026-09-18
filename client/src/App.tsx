@@ -1,22 +1,30 @@
-import { APITester } from "./APITester";
+
 import "./index.css";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+import {useEffect, useState} from "react";
+import {Api, type Book} from "../Api.ts";
+
+const MyApi = new Api();
 
 export function App() {
+
+    const [books, setBooks] = useState<Book[]>([])
+    
+    useEffect(() => {
+        MyApi.getBooks.libraryGetBooks().then(r =>
+        {
+            const data =r.data;
+            setBooks(data)
+        })
+    }, []);
   return (
     <div className="app">
-      <div className="logo-container">
-        <img src={logo} alt="Bun Logo" className="logo bun-logo" />
-        <img src={reactLogo} alt="React Logo" className="logo react-logo" />
-      </div>
-
-      <h1>Bun + React</h1>
-      <p>
-        Edit <code>src/App.tsx</code> and save to test HMR
-      </p>
-      <APITester />
+        {
+            books.map(b =>{
+               return <div key={b.bookId}>{b.bookTitle}</div> 
+            })
+        }
+    
     </div>
   );
 }
