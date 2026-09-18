@@ -17,11 +17,10 @@ public class LibraryService(MyDatabaseConnection db)
             .ThenLoad(a => a.BooksWrittenByAuthor)
             .Take(resultsPerPage)
             .Skip((page - 1) * resultsPerPage)
-            .Select(b => new BookDto()
+            .Select(b => new BookDto(b)
             {
-                
+                Author = new AuthorDto(b.Author)
             })
-            
             .ToList();
     }
     
